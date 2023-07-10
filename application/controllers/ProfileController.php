@@ -26,33 +26,31 @@ class ProfileController extends CI_Controller
 	public function create()
 	{
 		if ($this->input->post()) {
-			// // validate
-			// $this->load->library('form_validation');
-			// $this->form_validation->set_rules('name', 'Name', 'required');
-			// $this->form_validation->set_rules('email', 'Email', 'required|valid_email');
-			// $this->form_validation->set_rules('phone', 'Phone Number', 'required');
-			// $this->form_validation->set_rules('address', 'Address', 'required');
+			// validate
+			$this->load->library('form_validation');
+			$this->form_validation->set_rules('name', 'Name', 'required');
+			$this->form_validation->set_rules('email', 'Email', 'required|valid_email');
+			$this->form_validation->set_rules('phone', 'Phone Number', 'required');
+			$this->form_validation->set_rules('address', 'Address', 'required');
 
-			// if ($this->form_validation->run() == FALSE) {
-			// 	// send error
-			// 	$data['validation_errors'] = validation_errors();
-			// 	$this->load->view('profile/create', $data);
-			// } else {
-			// 	// save to model
-			// 	$this->load->model('Profile_model');
-			// 	$profile = $this->Profile_model;
-			// 	$profile->create();
-			// 	redirect('profile/list');
-			// }
-
-			$this->load->model('Profile_model');
-
-			if ($this->Profile_model->create()) {
-				// Data berhasil disimpan
-				redirect('profile/list');
+			if ($this->form_validation->run() == FALSE) {
+				// send error
+				$data['validation_errors'] = validation_errors();
+				$this->load->view('profile/create', $data);
 			} else {
-				// Terjadi kesalahan saat menyimpan data
-				echo 'Terjadi kesalahan saat menyimpan data.';
+				// save to model
+				$this->load->model('Profile_model');
+				$profile = $this->Profile_model;
+				$profile->create();
+
+				// if error
+				if ($this->db->error()) {
+					$error = $this->db->error();
+					echo "Database Error: " . $error['message'];
+				}
+
+				// redirect
+				redirect('profile');
 			}
 		} else {
 			$this->load->view('profile/create');
@@ -63,11 +61,41 @@ class ProfileController extends CI_Controller
 	{
 		$this->load->model('Profile_model');
 
-		$profile = $this->Profile_model->findById($id);
+		if ($this->input->post()) {
+			// validate
+			$this->load->library('form_validation');
+			$this->form_validation->set_rules('name', 'Name', 'required');
+			$this->form_validation->set_rules('email', 'Email', 'required|valid_email');
+			$this->form_validation->set_rules('phone', 'Phone Number', 'required');
+			$this->form_validation->set_rules('address', 'Address', 'required');
 
-		$data['profile'] = $profile;
-		$this->load->view('profile/update', $data);
+			if ($this->form_validation->run() == FALSE) {
+				// send error
+				$data['validation_errors'] = validation_errors();
+				$data['profile'] = $this->Profile_model->findById($id);
+				$this->load->view('profile/update', $data);
+			} else {
+				// update data in model
+				$data = array(
+					'name' => $this->input->post('name'),
+					'email' => $this->input->post('email'),
+					'phone' => $this->input->post('phone'),
+					'address' => $this->input->post('address'),
+				);
+				$this->Profile_model->update($id, $data);
+				if ($this->db->error()) {
+					$error = $this->db->error();
+					echo "Database Error: " . $error['message'];
+				}
+				redirect('profile/detail/' . $id);
+			}
+		} else {
+			// load profile data for update form
+			$data['profile'] = $this->Profile_model->findById($id);
+			$this->load->view('profile/update', $data);
+		}
 	}
+
 
 	public function delete($id)
 	{

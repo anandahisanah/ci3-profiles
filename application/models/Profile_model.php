@@ -15,6 +15,12 @@ class Profile_model extends CI_Model
 		return $query->result_array();
 	}
 
+	public function findById($id)
+	{
+		$query = $this->db->get_where('profiles', array('id' => $id));
+		return $query->row_array();
+	}
+
 	public function create()
 	{
 		$data = array(
@@ -24,5 +30,11 @@ class Profile_model extends CI_Model
 			'address' => $this->input->post('address'),
 		);
 		return $this->db->insert('profiles', $data);
+	}
+
+	public function update($id, $data)
+	{
+		$this->db->where('id', $id);
+		$this->db->update('profiles', $data);
 	}
 }
