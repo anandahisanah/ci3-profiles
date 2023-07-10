@@ -37,4 +37,9 @@ class Profile_model extends CI_Model
 		$this->db->where('id', $id);
 		$this->db->update('profiles', $data);
 	}
+
+	public function delete($id)
+	{
+		return $this->db->delete('profiles', array('id' => $id));
+	}
 }

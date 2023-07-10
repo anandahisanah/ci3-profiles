@@ -75,7 +75,7 @@ class ProfileController extends CI_Controller
 				$data['profile'] = $this->Profile_model->findById($id);
 				$this->load->view('profile/update', $data);
 			} else {
-				// update data in model
+				// update 
 				$data = array(
 					'name' => $this->input->post('name'),
 					'email' => $this->input->post('email'),
@@ -90,12 +90,11 @@ class ProfileController extends CI_Controller
 				redirect('profile/detail/' . $id);
 			}
 		} else {
-			// load profile data for update form
+			// load profile
 			$data['profile'] = $this->Profile_model->findById($id);
 			$this->load->view('profile/update', $data);
 		}
 	}
-
 
 	public function delete($id)
 	{
@@ -103,7 +102,15 @@ class ProfileController extends CI_Controller
 
 		$profile = $this->Profile_model->findById($id);
 
-		$data['profile'] = $profile;
-		$this->load->view('profile/update', $data);
+		if ($profile) {
+			// delete
+			$this->Profile_model->delete($id);
+			if ($this->db->error()) {
+				$error = $this->db->error();
+				echo "Database Error: " . $error['message'];
+			}
+		}
+
+		redirect('profile');
 	}
 }
