@@ -56,4 +56,5 @@ $route['translate_uri_dashes'] = FALSE;
 // profile
 $route['profile'] = 'ProfileController/index';
 $route['profile/create'] = 'ProfileController/create';
-$route['profile/detail'] = 'ProfileController/detail';
+$route['profile/detail/(:num)'] = 'ProfileController/detail/$1';
+$route['profile/update/(:num)'] = 'ProfileController/update/$1';
