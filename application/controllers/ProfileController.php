@@ -10,7 +10,17 @@ class ProfileController extends CI_Controller
 		$profiles = $this->Profile_model->get();
 
 		$data['profiles'] = $profiles;
-		$this->load->view('profile/read', $data);
+		$this->load->view('profile/list', $data);
+	}
+
+	public function detail($id)
+	{
+		$this->load->model('Profile_model');
+
+		$profile = $this->Profile_model->findById($id);
+
+		$data['profile'] = $profile;
+		$this->load->view('profile/detail', $data);
 	}
 
 	public function create()
@@ -32,14 +42,14 @@ class ProfileController extends CI_Controller
 			// 	$this->load->model('Profile_model');
 			// 	$profile = $this->Profile_model;
 			// 	$profile->create();
-			// 	redirect('profile/read');
+			// 	redirect('profile/list');
 			// }
 
 			$this->load->model('Profile_model');
 
 			if ($this->Profile_model->create()) {
 				// Data berhasil disimpan
-				redirect('profile/read');
+				redirect('profile/list');
 			} else {
 				// Terjadi kesalahan saat menyimpan data
 				echo 'Terjadi kesalahan saat menyimpan data.';
@@ -47,5 +57,25 @@ class ProfileController extends CI_Controller
 		} else {
 			$this->load->view('profile/create');
 		}
+	}
+
+	public function update($id)
+	{
+		$this->load->model('Profile_model');
+
+		$profile = $this->Profile_model->findById($id);
+
+		$data['profile'] = $profile;
+		$this->load->view('profile/update', $data);
+	}
+
+	public function delete($id)
+	{
+		$this->load->model('Profile_model');
+
+		$profile = $this->Profile_model->findById($id);
+
+		$data['profile'] = $profile;
+		$this->load->view('profile/update', $data);
 	}
 }

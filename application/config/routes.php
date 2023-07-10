@@ -58,3 +58,4 @@ $route['profile'] = 'ProfileController/index';
 $route['profile/create'] = 'ProfileController/create';
 $route['profile/detail/(:num)'] = 'ProfileController/detail/$1';
 $route['profile/update/(:num)'] = 'ProfileController/update/$1';
+$route['profile/delete/(:num)'] = 'ProfileController/delete/$1';
